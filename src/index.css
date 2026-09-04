@@ -1,0 +1,85 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Nxord design tokens (dark, único tema) */
+    --bg: #0C0E10;
+    --bg-raised: #12151A;
+    --bg-sunken: #08090B;
+    --border: #23282F;
+    --border-strong: #333A44;
+    --text: #E8EAE6;
+    --text-muted: #8B929A;
+    --text-faint: #5A6169;
+    --accent: #7FB6A4;
+    --accent-dim: #7FB6A433;
+    --warn: #D8A75C;
+    --danger: #C96F5E;
+    --info: #7C93A8;
+    --chart-3: #B9A88F;
+
+    /* shadcn/ui mappings (HSL) */
+    --background: 210 14% 5%;
+    --foreground: 90 9% 91%;
+    --card: 218 18% 9%;
+    --card-foreground: 90 9% 91%;
+    --popover: 218 18% 9%;
+    --popover-foreground: 90 9% 91%;
+    --primary: 160 27% 61%;
+    --primary-foreground: 210 14% 5%;
+    --secondary: 215 15% 16%;
+    --secondary-foreground: 90 9% 91%;
+    --muted: 215 15% 16%;
+    --muted-foreground: 212 7% 57%;
+    --accent-h: 160 27% 61%;
+    --accent-foreground: 210 14% 5%;
+    --destructive: 10 50% 58%;
+    --destructive-foreground: 90 9% 91%;
+    --border-hsl: 215 15% 16%;
+    --input: 215 15% 16%;
+    --ring: 160 27% 61%;
+    --radius: 0.625rem;
+    --sidebar-background: 220 16% 4%;
+    --sidebar-foreground: 212 7% 57%;
+    --sidebar-primary: 160 27% 61%;
+    --sidebar-primary-foreground: 210 14% 5%;
+    --sidebar-accent: 215 15% 16%;
+    --sidebar-accent-foreground: 90 9% 91%;
+    --sidebar-border: 215 15% 16%;
+    --sidebar-ring: 160 27% 61%;
+  }
+}
+
+@layer base {
+  html {
+    scroll-behavior: auto;
+  }
+  body {
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  * {
+    border-color: var(--border);
+  }
+  ::selection {
+    background: var(--accent-dim);
+    color: var(--text);
+  }
+}
+
+@layer utilities {
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+  .eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--text-faint);
+  }
+}
