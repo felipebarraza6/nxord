@@ -1,0 +1,60 @@
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  darkMode: ["class"],
+  content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
+  theme: {
+    extend: {
+      colors: {
+        bg: "var(--bg)",
+        "bg-raised": "var(--bg-raised)",
+        "bg-sunken": "var(--bg-sunken)",
+        border: "var(--border)",
+        "border-strong": "var(--border-strong)",
+        text: "var(--text)",
+        "text-muted": "var(--text-muted)",
+        "text-faint": "var(--text-faint)",
+        accent: "var(--accent)",
+        "accent-dim": "var(--accent-dim)",
+        warn: "var(--warn)",
+        danger: "var(--danger)",
+        info: "var(--info)",
+        "chart-3": "var(--chart-3)",
+        // shadcn/ui aliases
+        background: "var(--bg)",
+        foreground: "var(--text)",
+        input: "var(--border)",
+        ring: "var(--accent)",
+        primary: { DEFAULT: "var(--accent)", foreground: "var(--bg)" },
+        secondary: { DEFAULT: "var(--bg-raised)", foreground: "var(--text)" },
+        destructive: { DEFAULT: "var(--danger)", foreground: "var(--text)" },
+        muted: { DEFAULT: "var(--bg-raised)", foreground: "var(--text-muted)" },
+        popover: { DEFAULT: "var(--bg-raised)", foreground: "var(--text)" },
+        card: { DEFAULT: "var(--bg-raised)", foreground: "var(--text)" },
+        sidebar: {
+          DEFAULT: "var(--bg-sunken)",
+          foreground: "var(--text-muted)",
+          primary: "var(--accent)",
+          "primary-foreground": "var(--bg)",
+          accent: "var(--bg-raised)",
+          "accent-foreground": "var(--text)",
+          border: "var(--border)",
+          ring: "var(--accent)",
+        },
+      },
+      fontFamily: {
+        sans: ["Inter", "ui-sans-serif", "system-ui", "sans-serif"],
+      },
+      borderRadius: {
+        xl: "12px",
+        lg: "10px",
+        md: "8px",
+        sm: "6px",
+        full: "999px",
+      },
+      boxShadow: {
+        modal: "0 8px 32px rgba(0,0,0,.35)",
+      },
+    },
+  },
+  plugins: [require("tailwindcss-animate")],
+};
