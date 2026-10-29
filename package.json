@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "sync-contract": "node scripts/sync-contract.mjs"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
@@ -72,6 +73,7 @@
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.4.24",
     "globals": "^16.5.0",
+    "openapi-typescript": "^7.13.0",
     "plugin-inspect-react-code": "^1.0.3",
     "postcss": "^8.5.6",
     "tailwindcss": "^3.4.19",
