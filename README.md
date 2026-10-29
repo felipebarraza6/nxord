@@ -1,84 +1,77 @@
 # Nxord
 
-> Plataforma de gestión hídrica — telemetría en tiempo real, con módulo opcional para APR (Agua Potable Rural).
+## Qué es
 
-**Nxord** (del nórdico *Njord*, dios del mar y las aguas) es una aplicación frontend que se conecta a una API de operación existente (ERP multi-sucursal con vertical hídrico) y la enriquece con una experiencia dedicada a telemetría: equipos, variables, graficación y alertas. No requiere backend propio.
+Nxord es el cliente de telemetría hídrica y automatización de Ginnung. Muestra equipos, variables, gráficos y alertas en tiempo casi real, con un módulo opcional de APR (mediciones, tarifa, documentos y cumplimiento). No tiene backend propio: habla con la API Yggdra y, si no hay sesión o la API no responde, entra en modo demo.
 
-## Mundos del producto
+## A quién sirve
 
-| | **Nxord** (core) | **Nxord + Módulo APR** |
-|---|---|---|
-| Qué es | Telemetría pura | Core + gestión de cobro para APR |
-| Incluye | Dashboard en vivo, dispositivos, variables y graficación, alertas con acuse, multi-sucursal | Mediciones, tarificación (consumo → cargo → DTE → pago), documentos tributarios SII (39/33/61/56), cumplimiento DGA |
-| Se vende | Por sí mismo | Como add-on activable sobre Nxord |
-
-El módulo APR se activa desde la barra lateral de la app (persistido en `localStorage`); en producción puede derivarse del catálogo de módulos del plan de la sucursal.
+Operadores de sistemas de agua que miran pozos, caudales y alertas, y comités APR que además cobran el consumo. El módulo APR se enciende desde la barra lateral y queda en `localStorage`. En producción puede salir del catálogo de módulos del plan de la sucursal.
 
 ## Stack
 
-- **React 19 + TypeScript + Vite 7**
-- **Tailwind CSS v3** + shadcn/ui
-- TanStack Query · Framer Motion · GSAP (solo animaciones de entrada) · Recharts
-- Sin backend: capa de datos propia (`src/lib/api/`) con fallback a datos demo
+React 19, TypeScript, Vite 7, Tailwind CSS 3, shadcn/ui, TanStack Query, Framer Motion, GSAP, Recharts. No hay `package-lock.json` ni otro lockfile en la rama por defecto.
 
-## Conexión a la API
-
-La app consume una API externa tipo DRF con autenticación por token y contexto de sucursal por header:
-
-```
-Authorization: Token <key>
-X-Branch-ID: <branch_id>
-```
-
-Configuración por variable de entorno:
-
-```bash
-# .env
-VITE_YGGDRA_API_BASE=https://tu-api.ejemplo.cl/api
-```
-
-Si la API no está alcanzable (o no hay token), la app entra en **modo demo** con datos realistas (APR "Los Alerces", pozos, caudales, boletas SII, etc.) — útil para desarrollo y presentaciones.
-
-Endpoints consumidos (prefijo `/api/`):
-
-- `accounts/users/login_complete/` — login público
-- `iot-telemetry/` — `devices/`, `variables/`, `readings/`, `readings/stats/`, `alert-rules/`, `alert-triggers/`
-- `customers/clients/` — clientes APR
-- `finance/` — `tax-documents/`, `payments/`
-- `branches/` — sucursales
-
-> Nota: el backend debe permitir el origen de Nxord en CORS (`CORS_ALLOWED_ORIGINS`) y el header `x-branch-id`.
-
-## Desarrollo
+## Cómo correr en local
 
 ```bash
 npm install
-npm run dev      # desarrollo
-npm run build    # build de producción (dist/)
-npx tsc -b       # chequeo de tipos
+cp .env.example .env
+npm run dev
 ```
 
-## Estructura
+Vite sirve el dev server local. `npm run build` deja el estático en `dist/`. `npx tsc -b` chequea tipos; no hay script `typecheck` en `package.json`.
 
-```
-src/
-├── pages/
-│   ├── Home.tsx            # Landing (Nxord core + Módulo APR)
-│   ├── Login.tsx           # Acceso (Token auth, selector de sucursal, modo demo)
-│   └── app/                # App: Dashboard, Dispositivos, Alertas, Apr, Tarificacion
-├── components/
-│   ├── app/                # AppShell, StatCard, StatusBadge, BranchSelector, RequireAprModule…
-│   ├── dashboard/ dispositivos/ alertas/ apr/ tarificacion/
-│   └── ui/                 # shadcn/ui
-└── lib/
-    ├── api/                # client.ts, types.ts, hooks.ts, demo.ts
-    └── modules.ts          # Activación de módulos (APR on/off)
-```
 
-## Diseño
+## Variables de entorno
 
-Identidad "runa del agua": sobriedad nórdica, function-first. Tema oscuro único, paleta neutra con acento verde-mar `#7FB6A4`, tipografía Inter con numerales tabulares para lecturas y montos. Scroll 100% nativo.
+Solo nombres. Copia el ejemplo a un archivo local y completa los valores ahí. No los commitees ni los pegues en un issue.
 
----
+| Nombre | Uso |
+|--------|-----|
+| `VITE_YGGDRA_API_BASE` | Base de la API, con `/api`. El ejemplo local apunta a `http://localhost:8000/api` |
 
-© Nxord — Hecho en Chile.
+Si la variable no está o la API no responde, la app usa datos demo (no llama a producción por defecto del código de demo).
+
+
+## Scripts
+
+| Comando | Qué hace |
+|---------|----------|
+| `npm run dev` | Vite |
+| `npm run build` | `tsc -b` y build de Vite |
+| `npm run lint` | ESLint |
+| `npm run preview` | Previsualiza `dist/` |
+
+
+## Deploy (como está hoy)
+
+No hay workflow de deploy en `.github/workflows`. `docs/CONSUMERS.yaml` de la API marca el deploy de Nxord como `unknown` y el estado del consumidor como activo. Publicar un build es un paso manual fuera de este repo. Este documento no inventa un destino.
+
+
+Este PR de documentación no cambia workflows, secretos ni el destino del deploy.
+
+## Relación con la API Ginnung
+
+Auth `Authorization: Token` y header `X-Branch-ID`.
+
+Endpoints que usa el cliente, bajo `/api/`: `accounts/users/login_complete/`, `iot-telemetry/` (devices, variables, readings, stats, alert-rules, alert-triggers), `customers/clients/`, `finance/` (tax-documents, payments) y `branches/`.
+
+El consumo es fetch manual (`style: manual` en el inventario). No hay `sync-contract` ni tipos generados desde OpenAPI. Para enganchar el chequeo de contrato haría falta el archivo de sha, el comando de sync y un `contract.yml`, como describe el documento del backend. Hoy no están.
+
+La API tiene que permitir el origen de Nxord en `CORS_ALLOWED_ORIGINS` y el header `X-Branch-ID`.
+
+Id de consumidor y etiqueta de issues de backend: `front:nxord`.
+
+
+El chequeo reutilizable está en [docs/CONTRACT_CHECK.md](https://github.com/felipebarraza6/yggdra_infra/blob/main/docs/CONTRACT_CHECK.md) y en `.github/workflows/contract-check.yml` de `yggdra_infra`. Corre en el runner del VPS, compara el `schema_sha256` de `https://api.yggdra.cl/api/schema/contract/` con el sha commiteado en el front, regenera tipos desde el freeze de `api/schema/openapi.yaml` y exige `tsc --noEmit`.
+
+En la rama por defecto de este repo **no hay** un workflow `contract.yml` que llame ese chequeo. El inventario `docs/CONSUMERS.yaml` del backend describe el estilo de consumo de cada app.
+
+## Enlaces
+
+- Arquitectura: [docs/ARQUITECTURA.md](docs/ARQUITECTURA.md)
+- Ejemplo de entorno: [.env.example](.env.example)
+- API Ginnung: https://github.com/felipebarraza6/yggdra_infra
+- Chequeo de contrato: https://github.com/felipebarraza6/yggdra_infra/blob/main/docs/CONTRACT_CHECK.md
+- Inventario IoT del backend: https://github.com/felipebarraza6/yggdra_infra/blob/main/docs/iot_telemetry_front_inventory.md
