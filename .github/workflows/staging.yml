@@ -25,7 +25,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      VITE_YGGDRA_API_BASE: https://api.yggdra.cl/api
+      VITE_YGGDRA_API_BASE: https://api-staging.yggdra.cl/api
     steps:
       - uses: actions/checkout@v4
 
