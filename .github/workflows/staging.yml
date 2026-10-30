@@ -1,6 +1,6 @@
 name: Staging (GitHub Pages)
 
-# Nxord no tiene host propio. `dev` y `production` publican el mismo sitio
+# Nxord no tiene host propio. `staging` y `production` publican el mismo sitio
 # https://<owner>.github.io/nxord/. El último push reemplaza al otro.
 # `vite` usa base `./`, así que los assets funcionan en esa ruta.
 # `main` no despliega.
@@ -9,7 +9,7 @@ name: Staging (GitHub Pages)
 
 on:
   push:
-    branches: [dev]
+    branches: [staging]
   workflow_dispatch:
 
 permissions:
